@@ -2,6 +2,8 @@
 
 A simple, dependency-free Web Component library for rendering 7-segment and 16-segment displays using SVG.
 
+<img src="docs/screenshot.png">
+
 ## Components
 
 Currently, the library provides two Custom Elements:
