@@ -222,7 +222,7 @@ export class SegmentDisplayBase extends HTMLElement {
       text.setAttribute('y', cy);
       text.setAttribute('class', 'label');
       text.textContent = id;
-      seg.parentNode.insertBefore(text, seg.nextSibling);
+      seg.parentNode.appendChild(text);
     });
   }
 }
@@ -305,13 +305,13 @@ const SIXTEEN_SEGMENT_PATHS = `
   <line x1="14" y1="50" x2="28" y2="50" class="segment" data-segment="g1" />
   <line x1="32" y1="50" x2="46" y2="50" class="segment" data-segment="g2" />
   <!-- Diagonals and center vertical -->
-  <line x1="14" y1="14" x2="28" y2="46" class="segment" data-segment="h" />
+  <line x1="17" y1="18" x2="26" y2="42" class="segment" data-segment="h" />
   <line x1="30" y1="14" x2="30" y2="46" class="segment" data-segment="i" />
-  <line x1="46" y1="14" x2="32" y2="46" class="segment" data-segment="j" />
+  <line x1="43" y1="18" x2="34" y2="42" class="segment" data-segment="j" />
 
-  <line x1="28" y1="54" x2="14" y2="86" class="segment" data-segment="k" />
+  <line x1="26" y1="58" x2="17" y2="82" class="segment" data-segment="k" />
   <line x1="30" y1="86" x2="30" y2="54" class="segment" data-segment="l" />
-  <line x1="32" y1="54" x2="46" y2="86" class="segment" data-segment="m" />
+  <line x1="34" y1="58" x2="43" y2="82" class="segment" data-segment="m" />
   <!-- Decimal Point: dp -->
   <line x1="60" y1="90" x2="60" y2="90" class="segment" data-segment="dp" />
 `;
