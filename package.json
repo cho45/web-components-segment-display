@@ -1,6 +1,7 @@
 {
   "name": "web-components-segment-display",
   "version": "1.0.0",
+  "type": "module",
   "main": "segment-displays.js",
   "scripts": {
     "test": "npx playwright test"

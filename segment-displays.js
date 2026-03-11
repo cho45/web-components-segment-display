@@ -1,4 +1,4 @@
-class SegmentDisplayBase extends HTMLElement {
+export class SegmentDisplayBase extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
@@ -236,7 +236,7 @@ const SEVEN_SEG_MAP = {
   '.': ['dp']
 };
 
-class SevenSegment extends SegmentDisplayBase {
+export class SevenSegment extends SegmentDisplayBase {
   getSegmentPaths() {
     return SEVEN_SEGMENT_PATHS;
   }
@@ -347,7 +347,7 @@ SIXTEEN_SEG_MAP['V'] = ['l', 'k']; // Let's just use the bottom diagonals? No, t
 // Let's use h and j for small V, and f,e and d1, d2 for U.
 // Let's just use X-like diagonals for now.
 
-class SixteenSegment extends SegmentDisplayBase {
+export class SixteenSegment extends SegmentDisplayBase {
   getSegmentPaths() {
     return SIXTEEN_SEGMENT_PATHS;
   }
