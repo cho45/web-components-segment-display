@@ -35,6 +35,25 @@
       font-family: monospace;
       font-size: 1.2rem;
     }
+    .size-small {
+      --segment-stroke-width: 6;
+      height: 30px;
+    }
+    .size-medium {
+      --segment-stroke-width: 8;
+      height: 50px;
+    }
+    .size-large {
+      --segment-stroke-width: 10;
+      height: 80px;
+    }
+    /* Wrap the displays so they sit nicely */
+    .display-group {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
   </style>
   <script type="module" src="segment-displays.js"></script>
 </head>
@@ -47,8 +66,12 @@
     <div class="controls">
       <input type="text" id="input7" value="  12" maxlength="4" placeholder="Enter number">
     </div>
-    <seven-segment id="seg7" digits="4" value="  12" color="#0f0" bg-color="#131"></seven-segment>
-    <br><br>
+    <div class="display-group">
+      <seven-segment class="synced7 size-small" digits="4" value="  12" color="#0f0" bg-color="#131"></seven-segment>
+      <seven-segment class="synced7 size-medium" digits="4" value="  12" color="#0f0" bg-color="#131"></seven-segment>
+      <seven-segment class="synced7 size-large" digits="4" value="  12" color="#0f0" bg-color="#131"></seven-segment>
+    </div>
+    <br>
     <button id="btn7-anim">Animate Segments</button>
   </div>
 
@@ -57,22 +80,26 @@
     <div class="controls">
       <input type="text" id="input16" value="HELLO  " maxlength="8" placeholder="Enter text">
     </div>
-    <sixteen-segment id="seg16" digits="8" value="HELLO  " color="#0ff" bg-color="#022"></sixteen-segment>
-    <br><br>
+    <div class="display-group">
+      <sixteen-segment class="synced16 size-small" digits="8" value="HELLO  " color="#0ff" bg-color="#022"></sixteen-segment>
+      <sixteen-segment class="synced16 size-medium" digits="8" value="HELLO  " color="#0ff" bg-color="#022"></sixteen-segment>
+      <sixteen-segment class="synced16 size-large" digits="8" value="HELLO  " color="#0ff" bg-color="#022"></sixteen-segment>
+    </div>
+    <br>
     <button id="btn16-anim">Test setSegments()</button>
   </div>
 
   <script>
     const input7 = document.getElementById('input7');
-    const seg7 = document.getElementById('seg7');
+    const seg7s = document.querySelectorAll('.synced7');
     input7.addEventListener('input', (e) => {
-      seg7.setValue(e.target.value);
+      seg7s.forEach(seg => seg.setValue(e.target.value));
     });
 
     const input16 = document.getElementById('input16');
-    const seg16 = document.getElementById('seg16');
+    const seg16s = document.querySelectorAll('.synced16');
     input16.addEventListener('input', (e) => {
-      seg16.setValue(e.target.value);
+      seg16s.forEach(seg => seg.setValue(e.target.value));
     });
 
     // Animation Demo 7-Seg
@@ -89,12 +116,12 @@
       
       const interval = setInterval(() => {
         for (let i = 0; i < 4; i++) {
-          seg7.setSegments(i, sequence[step % sequence.length]);
+          seg7s.forEach(seg => seg.setSegments(i, sequence[step % sequence.length]));
         }
         step++;
         if (step > 20) {
           clearInterval(interval);
-          seg7.setValue(input7.value); // Restore
+          seg7s.forEach(seg => seg.setValue(input7.value)); // Restore
         }
       }, 100);
     });
@@ -112,13 +139,13 @@
         });
         
         for(let i=0; i<8; i++) {
-          seg16.setSegments(i, map);
+          seg16s.forEach(seg => seg.setSegments(i, map));
         }
 
         count++;
         if (count > 10) {
           clearInterval(interval);
-          seg16.setValue(input16.value); // Restore
+          seg16s.forEach(seg => seg.setValue(input16.value)); // Restore
         }
       }, 150);
     });
