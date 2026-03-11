@@ -37,7 +37,7 @@
     }
     .size-small {
       --segment-stroke-width: 6;
-      height: 30px;
+      height: 40px;
     }
     .size-medium {
       --segment-stroke-width: 8;
@@ -143,7 +143,7 @@
       ];
       
       for await (const step of Array(21).keys()) {
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 8; i++) {
           seg7s.forEach(seg => seg.setSegments(i, sequence[step % sequence.length]));
         }
         await sleep(100);
