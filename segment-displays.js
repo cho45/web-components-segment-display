@@ -124,14 +124,31 @@ class SegmentDisplayBase extends HTMLElement {
     const strVal = String(val).toUpperCase();
     const map = this.getCharMap();
     
+    // Extract characters, treating a character followed by '.' as a single unit
+    const chars = [];
+    for (let i = 0; i < strVal.length; i++) {
+      if (strVal[i] === '.' && chars.length > 0 && chars[chars.length - 1] !== ' ') {
+        chars[chars.length - 1] += '.';
+      } else {
+        chars.push(strVal[i]);
+      }
+    }
+
     // Right-align by default
-    const formatted = strVal.padStart(this._digits, " ");
-    const startIndex = Math.max(0, formatted.length - this._digits);
-    const displayStr = formatted.slice(startIndex);
+    while (chars.length < this._digits) {
+      chars.unshift(" ");
+    }
+    const displayChars = chars.slice(Math.max(0, chars.length - this._digits));
 
     for (let i = 0; i < this._digits; i++) {
-      const char = displayStr[i];
-      const activeSegments = map[char] || [];
+      const charStr = displayChars[i];
+      const baseChar = charStr[0];
+      const hasDp = charStr.includes('.');
+      
+      const activeSegments = [...(map[baseChar] || [])];
+      if (hasDp || baseChar === '.') {
+        if (!activeSegments.includes('dp')) activeSegments.push('dp');
+      }
       this.setSegmentsForDigit(i, activeSegments);
     }
   }
@@ -192,6 +209,8 @@ const SEVEN_SEGMENT_PATHS = `
   <line x1="10" y1="15" x2="10" y2="45" class="segment" data-segment="f" />
   <!-- Middle: g -->
   <line x1="15" y1="50" x2="45" y2="50" class="segment" data-segment="g" />
+  <!-- Decimal Point: dp -->
+  <line x1="60" y1="90" x2="60" y2="90" class="segment" data-segment="dp" />
 `;
 
 // Simple mapping for 0-9 and a few letters
@@ -213,7 +232,8 @@ const SEVEN_SEG_MAP = {
   'E': ['a', 'd', 'e', 'f', 'g'],
   'F': ['a', 'e', 'f', 'g'],
   '-': ['g'],
-  ' ': []
+  ' ': [],
+  '.': ['dp']
 };
 
 class SevenSegment extends SegmentDisplayBase {
@@ -254,6 +274,8 @@ const SIXTEEN_SEGMENT_PATHS = `
   <line x1="46" y1="86" x2="32" y2="54" class="segment" data-segment="k" />
   <line x1="30" y1="86" x2="30" y2="54" class="segment" data-segment="m" />
   <line x1="14" y1="86" x2="28" y2="54" class="segment" data-segment="l" />
+  <!-- Decimal Point: dp -->
+  <line x1="60" y1="90" x2="60" y2="90" class="segment" data-segment="dp" />
 `;
 
 const SIXTEEN_SEG_MAP = {
@@ -314,7 +336,8 @@ const SIXTEEN_SEG_MAP = {
   'Y': ['h', 'j', 'm'],
   'Z': ['a1', 'a2', 'j', 'l', 'd1', 'd2'],
   '-': ['g1', 'g2'],
-  ' ': []
+  ' ': [],
+  '.': ['dp']
 };
 
 // Fix V, W mappings to look okay
