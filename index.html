@@ -47,6 +47,14 @@
       --segment-stroke-width: 10;
       height: 80px;
     }
+    .size-xlarge {
+      --segment-stroke-width: 12;
+      height: 180px;
+    }
+    .size-reference {
+      --segment-stroke-width: 12;
+      height: 300px;
+    }
     /* Wrap the displays so they sit nicely */
     .display-group {
       display: flex;
@@ -89,7 +97,26 @@
     <button id="btn16-anim">Test setSegments()</button>
   </div>
 
-  <script>
+  <div class="panel">
+    <h2>Reference (Segment Layout)</h2>
+    <div class="display-group" style="flex-direction: row; gap: 4rem;">
+      <div style="text-align: center;">
+        <h3 style="margin-top: 0; color: #aaa;">7-Segment</h3>
+        <seven-segment id="ref7" class="size-reference show-labels" digits="1" color="#888" bg-color="#222"></seven-segment>
+      </div>
+      <div style="text-align: center;">
+        <h3 style="margin-top: 0; color: #aaa;">16-Segment</h3>
+        <sixteen-segment id="ref16" class="size-reference show-labels" digits="1" color="#888" bg-color="#222"></sixteen-segment>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    await Promise.all([
+      customElements.whenDefined('seven-segment'),
+      customElements.whenDefined('sixteen-segment'),
+    ]);
+
     const input7 = document.getElementById('input7');
     const seg7s = document.querySelectorAll('.synced7');
     input7.addEventListener('input', (e) => {
@@ -149,6 +176,19 @@
         }
       }, 150);
     });
+
+    // Reference displays - turn ON all segments and show IDs
+    const ref7 = document.getElementById('ref7');
+    const ref16 = document.getElementById('ref16');
+    ref7.setSegments(0, {
+      a: true, b: true, c: true, d: true, e: true, f: true, g: true, dp: true
+    });
+    ref7.showSegmentId();
+    ref16.setSegments(0, {
+      a1: true, a2: true, b: true, c: true, d1: true, d2: true, e: true, f: true,
+      g1: true, g2: true, h: true, i: true, j: true, k: true, m: true, l: true, dp: true
+    });
+    ref16.showSegmentId();
   </script>
 </body>
 </html>

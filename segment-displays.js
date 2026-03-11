@@ -83,6 +83,19 @@ export class SegmentDisplayBase extends HTMLElement {
         stroke: var(--segment-on);
         filter: drop-shadow(0 0 2px var(--segment-on));
       }
+      /* Optional labels for debugging/reference */
+      text.label {
+        fill: #fff;
+        font-family: sans-serif;
+        font-size: 10px;
+        text-anchor: middle;
+        dominant-baseline: central;
+        pointer-events: none;
+        visibility: hidden;
+      }
+      :host(.show-labels) text.label {
+        visibility: visible;
+      }
     `;
   }
 
@@ -123,7 +136,7 @@ export class SegmentDisplayBase extends HTMLElement {
   setValue(val) {
     const strVal = String(val).toUpperCase();
     const map = this.getCharMap();
-    
+
     // Extract characters, treating a character followed by '.' as a single unit
     const chars = [];
     for (let i = 0; i < strVal.length; i++) {
@@ -144,7 +157,7 @@ export class SegmentDisplayBase extends HTMLElement {
       const charStr = displayChars[i];
       const baseChar = charStr[0];
       const hasDp = charStr.includes('.');
-      
+
       const activeSegments = [...(map[baseChar] || [])];
       if (hasDp || baseChar === '.') {
         if (!activeSegments.includes('dp')) activeSegments.push('dp');
@@ -187,6 +200,30 @@ export class SegmentDisplayBase extends HTMLElement {
         }
       }
     }
+  }
+
+  showSegmentId() {
+    // Remove any previously generated labels
+    this.shadowRoot.querySelectorAll('text.label').forEach(el => el.remove());
+
+    this.shadowRoot.querySelectorAll('.segment').forEach(seg => {
+      const id = seg.getAttribute('data-segment');
+      if (!id) return;
+
+      const x1 = parseFloat(seg.getAttribute('x1'));
+      const y1 = parseFloat(seg.getAttribute('y1'));
+      const x2 = parseFloat(seg.getAttribute('x2'));
+      const y2 = parseFloat(seg.getAttribute('y2'));
+      const cx = (x1 + x2) / 2;
+      const cy = (y1 + y2) / 2;
+
+      const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      text.setAttribute('x', cx);
+      text.setAttribute('y', cy);
+      text.setAttribute('class', 'label');
+      text.textContent = id;
+      seg.parentNode.insertBefore(text, seg.nextSibling);
+    });
   }
 }
 
