@@ -87,7 +87,7 @@ export class SegmentDisplayBase extends HTMLElement {
       text.label {
         fill: #fff;
         font-family: sans-serif;
-        font-size: 10px;
+        font-size: 5px;
         text-anchor: middle;
         dominant-baseline: central;
         pointer-events: none;
