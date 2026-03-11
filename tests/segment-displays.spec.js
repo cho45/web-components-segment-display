@@ -87,4 +87,41 @@ test.describe('Segment Displays', () => {
     await expect(digit2.locator('[data-segment="a"]')).toHaveClass(/on/); // 3 has 'a'
     await expect(digit2.locator('[data-segment="dp"]')).not.toHaveClass(/on/);
   });
+
+  test('custom svg is parsed and used', async ({ page }) => {
+    // We can inject a custom SVG directly into the page to test
+    await page.evaluate(() => {
+      const display = document.createElement('seven-segment');
+      display.id = 'custom-test';
+      display.setAttribute('digits', '1');
+      display.setAttribute('value', '8');
+      display.innerHTML = `
+        <svg viewBox="0 0 70 100" id="inner-svg">
+          <circle cx="10" cy="10" r="5" class="segment" data-segment="a" />
+          <circle cx="20" cy="20" r="5" class="segment" data-segment="b" />
+          <circle cx="30" cy="30" r="5" class="segment" data-segment="c" />
+          <circle cx="40" cy="40" r="5" class="segment" data-segment="d" />
+          <circle cx="50" cy="50" r="5" class="segment" data-segment="e" />
+          <circle cx="60" cy="60" r="5" class="segment" data-segment="f" />
+          <circle cx="70" cy="70" r="5" class="segment" data-segment="g" />
+        </svg>
+      `;
+      document.body.appendChild(display);
+    });
+
+    const display = page.locator('#custom-test');
+    await expect(display).toBeVisible();
+
+    // The shadow DOM should now contain our custom shapes
+    const digitGroup = display.locator('g.digit[data-digit-index="0"]');
+    const segA = digitGroup.locator('circle[data-segment="a"]');
+    const segB = digitGroup.locator('circle[data-segment="b"]');
+    
+    await expect(segA).toBeVisible();
+    await expect(segB).toBeVisible();
+    
+    // Value is 8, so both should be on
+    await expect(segA).toHaveClass(/on/);
+    await expect(segB).toHaveClass(/on/);
+  });
 });
