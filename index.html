@@ -62,6 +62,35 @@
       gap: 1rem;
       margin-top: 1rem;
     }
+    
+    /* Clock Demo Specific Styles */
+    .clock-display {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    .clock-colon {
+      width: 20px;
+      height: 100px;
+      margin: 0 -10px 0 -20px;
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+    }
+    .clock-colon circle {
+      fill: #0ff;
+      filter: drop-shadow(0 0 5px #0ff);
+      transition: opacity 0.2s;
+    }
+    .clock-colon.blink circle {
+      opacity: 0.1;
+    }
   </style>
   <script type="module" src="segment-displays.js"></script>
 </head>
@@ -100,7 +129,7 @@
   <div class="panel">
     <h2>Custom SVG Display</h2>
     <div class="display-group">
-      <seven-segment digits="4" value="8.0:4.5" color="#f0f" bg-color="#202" class="size-large">
+      <seven-segment digits="4" value="1234" color="#f0f" bg-color="#202" class="size-large">
         <svg viewBox="0 0 70 100">
           <rect x="15" y="5" width="40" height="10" rx="5" class="segment" data-segment="a" />
           <rect x="55" y="15" width="10" height="35" rx="5" class="segment" data-segment="b" />
@@ -112,6 +141,31 @@
           <circle cx="60" cy="90" r="5" class="segment" data-segment="dp" />
         </svg>
       </seven-segment>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Clock Demo</h2>
+    <div class="clock-display">
+      <seven-segment id="clock-hours" digits="2" value="00" color="#0ff" bg-color="#022" class="size-large"></seven-segment>
+      
+      <div class="clock-colon" id="colon-1">
+        <svg viewBox="0 0 20 100" width="20" height="100">
+          <circle cx="12" cy="35" r="5" />
+          <circle cx="10" cy="65" r="5" />
+        </svg>
+      </div>
+
+      <seven-segment id="clock-minutes" digits="2" value="00" color="#0ff" bg-color="#022" class="size-large"></seven-segment>
+
+      <div class="clock-colon" id="colon-2">
+        <svg viewBox="0 0 20 100" width="20" height="100">
+          <circle cx="12" cy="35" r="5" />
+          <circle cx="10" cy="65" r="5" />
+        </svg>
+      </div>
+
+      <seven-segment id="clock-seconds" digits="2" value="00" color="#0ff" bg-color="#022" class="size-large"></seven-segment>
     </div>
   </div>
 
@@ -189,6 +243,31 @@
       }
       seg16s.forEach(seg => seg.setValue(input16.value)); // Restore
     });
+
+    // Custom SVG Clock Demo Logic
+    const clockHours = document.getElementById('clock-hours');
+    const clockMinutes = document.getElementById('clock-minutes');
+    const clockSeconds = document.getElementById('clock-seconds');
+    const colons = [document.getElementById('colon-1'), document.getElementById('colon-2')];
+
+    function updateClock() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+
+      clockHours.setValue(h);
+      clockMinutes.setValue(m);
+      clockSeconds.setValue(s);
+
+      // Blink colons
+      colons.forEach(c => c.classList.toggle('blink'));
+    }
+
+    // Initialize clock immediately
+    updateClock();
+    // Update every half second to handle blinking colons smoothly
+    setInterval(updateClock, 1000);
 
     // Reference displays - turn ON all segments and show IDs
     const ref7 = document.getElementById('ref7');
