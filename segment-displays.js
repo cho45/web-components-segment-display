@@ -271,9 +271,9 @@ const SIXTEEN_SEGMENT_PATHS = `
   <line x1="14" y1="14" x2="28" y2="46" class="segment" data-segment="h" />
   <line x1="30" y1="14" x2="30" y2="46" class="segment" data-segment="i" />
   <line x1="46" y1="14" x2="32" y2="46" class="segment" data-segment="j" />
-  <line x1="46" y1="86" x2="32" y2="54" class="segment" data-segment="k" />
+  <line x1="32" y1="54" x2="46" y2="86" class="segment" data-segment="k" />
   <line x1="30" y1="86" x2="30" y2="54" class="segment" data-segment="m" />
-  <line x1="14" y1="86" x2="28" y2="54" class="segment" data-segment="l" />
+  <line x1="28" y1="54" x2="14" y2="86" class="segment" data-segment="l" />
   <!-- Decimal Point: dp -->
   <line x1="60" y1="90" x2="60" y2="90" class="segment" data-segment="dp" />
 `;
@@ -310,7 +310,7 @@ const SIXTEEN_SEG_MAP = {
   'S': ['a1', 'a2', 'f', 'g1', 'g2', 'c', 'd1', 'd2'],
   'T': ['a1', 'a2', 'i', 'm'],
   'U': ['f', 'e', 'd1', 'd2', 'c', 'b'],
-  'V': ['h', 'm', 'b', 'c'],
+  'V': ['f', 'e', 'l', 'j'],
   'W': ['b', 'c', 'f', 'e', 'l', 'k'],
   'X': ['h', 'j', 'l', 'k'],
   'Y': ['h', 'j', 'm'],
