@@ -354,7 +354,7 @@ const SIXTEEN_SEGMENT_PATHS = `
 `;
 
 const SIXTEEN_SEG_MAP = {
-  '0': ['a1', 'a2', 'b', 'c', 'd1', 'd2', 'e', 'f', 'l', 'j'], // with slash
+  '0': ['a1', 'a2', 'b', 'c', 'd1', 'd2', 'e', 'f', 'k', 'j'], // with slash
   '1': ['b', 'c'],
   '2': ['a1', 'a2', 'b', 'g2', 'g1', 'e', 'd1', 'd2'],
   '3': ['a1', 'a2', 'b', 'c', 'd1', 'd2', 'g2'],
