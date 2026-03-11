@@ -129,9 +129,10 @@
       seg16s.forEach(seg => seg.setValue(e.target.value));
     });
 
+    const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
     // Animation Demo 7-Seg
-    document.getElementById('btn7-anim').addEventListener('click', () => {
-      let step = 0;
+    document.getElementById('btn7-anim').addEventListener('click', async () => {
       const sequence = [
         { a: true, b: false, c: false, d: false, e: false, f: false, g: false },
         { a: false, b: true, c: false, d: false, e: false, f: false, g: false },
@@ -141,40 +142,34 @@
         { a: false, b: false, c: false, d: false, e: false, f: true, g: false },
       ];
       
-      const interval = setInterval(() => {
+      for await (const step of Array(21).keys()) {
         for (let i = 0; i < 4; i++) {
           seg7s.forEach(seg => seg.setSegments(i, sequence[step % sequence.length]));
         }
-        step++;
-        if (step > 20) {
-          clearInterval(interval);
-          seg7s.forEach(seg => seg.setValue(input7.value)); // Restore
-        }
-      }, 100);
+        await sleep(100);
+      }
+      seg7s.forEach(seg => seg.setValue(input7.value)); // Restore
     });
 
     // Animation Demo 16-Seg
-    document.getElementById('btn16-anim').addEventListener('click', () => {
-      const allSegments = ['a1','a2','b','c','d2','d1','e','f','g1','g2','h','i','j','k','m','l'];
+    document.getElementById('btn16-anim').addEventListener('click', async () => {
+      const allPossibleSegments = ['a1','a2','b','c','d1','d2','e','f','g1','g2','h','i','j','k','l','m','dp'];
+      const path = ["f", "e", "k", "j", "b", "c", "m", "h", "f", "g1", "g2", "c", "d2", "d1", "e", "g1", "g2", "b", "a2", "a1", "i", "l", "d1", "e"];
       
-      let count = 0;
-      const interval = setInterval(() => {
+      const sequence = path.map(name => {
         const map = {};
-        // Randomly turn on half segments
-        allSegments.forEach(seg => {
-          map[seg] = Math.random() > 0.5;
-        });
-        
+        allPossibleSegments.forEach(s => map[s] = (s === name));
+        return map;
+      });
+
+      for await (const step of Array(sequence.length * 2).keys()) {
+        const map = sequence[step % sequence.length];
         for(let i=0; i<8; i++) {
           seg16s.forEach(seg => seg.setSegments(i, map));
         }
-
-        count++;
-        if (count > 10) {
-          clearInterval(interval);
-          seg16s.forEach(seg => seg.setValue(input16.value)); // Restore
-        }
-      }, 150);
+        await sleep(80);
+      }
+      seg16s.forEach(seg => seg.setValue(input16.value)); // Restore
     });
 
     // Reference displays - turn ON all segments and show IDs
