@@ -310,28 +310,8 @@ const SIXTEEN_SEG_MAP = {
   'S': ['a1', 'a2', 'f', 'g1', 'g2', 'c', 'd1', 'd2'],
   'T': ['a1', 'a2', 'i', 'm'],
   'U': ['f', 'e', 'd1', 'd2', 'c', 'b'],
-  'V': ['f', 'e', 'l', 'j'], // Actually \ / for V? wait, l is bot-left-to-mid, h is top-left-to-mid. V is f, e and l? No, V is f, l, j? V could use h, l for left and right?
-  // Let's re-map V
-  // V can use f and e for left, but slanted. But standard 16 seg V uses top left (f) or slanted.
-  // We'll just map V to f, e, d1, d2 or use diagonals: l, m, or just h, k?
-  // standard: ['l', 'j'], wait, left diagonal is h, l? no, h goes from tl to m, l goes from m to bl.
-  // Actually, wait, L is m to bl. Let's trace it.
-  // x1=14 y1=86 to x2=28 y2=54. This is bottom-left to center.
-  // Mmm... h is 14,14 to 28,46 (top-left to center).
-  // j is 46,14 to 32,46 (top-right to center).
-  // k is 46,86 to 32,54 (bottom-right to center).
-  // l is 14,86 to 28,54 (bottom-left to center).
-  // Yes. V is usually e, f, l to center and j to top right? Or just l and k!
-  // l and k would make a chevron pointing UP. No, wait. V points DOWN.
-  // V points down, so it should be h and j? Wait... no, h goes \ and j goes /. That points DOWN.
-  // wait, from top-left (14,14) to center (28,46) is \.
-  // from top-right (46,14) to center (32,46) is /.
-  // If h and j are on, it looks like a V. But it's on the top half. We need e, l for bottom half?
-  // A large V uses f, l, j for some reason? No, large V is f, l, k?
-  // Let's just use 'e', 'f', 'l', 'j' -- wait. l is / (bottom left to center).
-  // j is / (center to top right). Then it's a giant slash.
-  // Let's use simple letters for now.
-  'W': ['b', 'c', 'f', 'e', 'l', 'k'], // down left, down right, up-mid left, up-mid right
+  'V': ['l', 'k'],
+  'W': ['b', 'c', 'f', 'e', 'l', 'k'],
   'X': ['h', 'j', 'l', 'k'],
   'Y': ['h', 'j', 'm'],
   'Z': ['a1', 'a2', 'j', 'l', 'd1', 'd2'],
@@ -339,13 +319,6 @@ const SIXTEEN_SEG_MAP = {
   ' ': [],
   '.': ['dp']
 };
-
-// Fix V, W mappings to look okay
-SIXTEEN_SEG_MAP['V'] = ['f', 'e', 'l', 'k']; // Left wall, wait, l goes bottom-left to center (/). k goes bottom-right to center (\).
-// V: left slants down \ (h), right slants up / (?). No, V is just \ /.
-SIXTEEN_SEG_MAP['V'] = ['l', 'k']; // Let's just use the bottom diagonals? No, top diagonals are h (\) and j (/).
-// Let's use h and j for small V, and f,e and d1, d2 for U.
-// Let's just use X-like diagonals for now.
 
 export class SixteenSegment extends SegmentDisplayBase {
   getSegmentPaths() {
