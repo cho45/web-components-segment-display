@@ -9,6 +9,13 @@ export class SegmentDisplayBase extends HTMLElement {
     this._padding = 5;
     this._digitWidth = 70;
     this._digitHeight = 100;
+
+    this._observer = new MutationObserver(() => {
+      this.render();
+      if (this.hasAttribute("value")) {
+        this.setValue(this.getAttribute("value"));
+      }
+    });
   }
 
   static get observedAttributes() {
@@ -44,6 +51,11 @@ export class SegmentDisplayBase extends HTMLElement {
     if (this.hasAttribute("value")) {
       this.setValue(this.getAttribute("value"));
     }
+    this._observer.observe(this, { childList: true, subtree: true, characterData: true });
+  }
+
+  disconnectedCallback() {
+    this._observer.disconnect();
   }
 
   updateStyles() {
@@ -70,18 +82,21 @@ export class SegmentDisplayBase extends HTMLElement {
         width: auto;
         min-height: 40px;
       }
-      path, polyline, line {
+      path, polyline, line, polygon, rect, circle {
         stroke: var(--segment-off);
         stroke-width: var(--segment-stroke-width);
         stroke-linecap: round;
         stroke-linejoin: round;
         fill: none;
-        transition: stroke 0.1s ease-in-out;
+        transition: stroke 0.05s ease-in-out, fill 0.05s ease-in-out;
       }
       /* Optional subtle glow for 'on' segments */
       .segment.on {
         stroke: var(--segment-on);
         filter: drop-shadow(0 0 2px var(--segment-on));
+      }
+      polygon.segment.on, rect.segment.on, circle.segment.on {
+        fill: var(--segment-on);
       }
       /* Optional labels for debugging/reference */
       text.label {
@@ -100,15 +115,35 @@ export class SegmentDisplayBase extends HTMLElement {
   }
 
   render() {
-    const totalWidth = this._digits * this._digitWidth;
-    const height = this._digitHeight;
+    const customSvg = this.querySelector('svg');
+    let digitWidth = this._digitWidth;
+    let digitHeight = this._digitHeight;
+    let segmentPaths = this.getSegmentPaths();
+
+    if (customSvg) {
+      segmentPaths = customSvg.innerHTML;
+      const vb = customSvg.getAttribute('viewBox');
+      if (vb) {
+        const parts = vb.split(/[\s,]+/).map(parseFloat);
+        if (parts.length === 4) {
+          digitWidth = parts[2];
+          digitHeight = parts[3];
+        }
+      } else {
+        if (customSvg.getAttribute('width')) digitWidth = parseFloat(customSvg.getAttribute('width'));
+        if (customSvg.getAttribute('height')) digitHeight = parseFloat(customSvg.getAttribute('height'));
+      }
+    }
+
+    const totalWidth = this._digits * digitWidth;
+    const height = digitHeight;
 
     let digitsHtml = "";
     for (let i = 0; i < this._digits; i++) {
-      const offsetX = i * this._digitWidth;
+      const offsetX = i * digitWidth;
       // Slanting done inline to avoid CSS transform overriding the translate
       digitsHtml += `<g class="digit" transform="translate(${offsetX + 20}, 0) skewX(-8)" data-digit-index="${i}">
-        ${this.getSegmentPaths()}
+        ${segmentPaths}
       </g>`;
     }
 
