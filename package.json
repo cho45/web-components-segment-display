@@ -1,0 +1,16 @@
+{
+  "name": "web-components-segment-display",
+  "version": "1.0.0",
+  "main": "segment-displays.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "cho45 <cho45@lowreal.net> (http://www.lowreal.net/)",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "http-server": "^14.1.1"
+  }
+}
