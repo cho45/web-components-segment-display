@@ -34,6 +34,24 @@ Currently, the library provides two Custom Elements:
 <sixteen-segment digits="8" value="HELLO-16" color="#0f0"></sixteen-segment>
 ```
 
+### Styling / Size Customization
+
+The components are designed to be styled using CSS. The height of the component dictates its overall size, and the width scales automatically proportionally. You can also customize the thickness of the segments via a CSS custom property (`--segment-stroke-width`).
+
+```css
+/* Example: Medium sized display */
+seven-segment {
+  height: 50px;
+  --segment-stroke-width: 8;
+}
+
+/* Example: Large sized display */
+sixteen-segment {
+  height: 80px;
+  --segment-stroke-width: 10;
+}
+```
+
 ### Programmatic Control
 
 You can also change properties dynamically via JavaScript:
