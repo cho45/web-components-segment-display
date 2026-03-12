@@ -80,7 +80,6 @@ export class SegmentDisplayBase extends HTMLElement {
         display: block;
         height: 100%;
         width: auto;
-        min-height: 40px;
       }
       path, polyline, line, polygon, rect, circle {
         stroke: var(--segment-off);
